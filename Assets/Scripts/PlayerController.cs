@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public float playerSpeed = 2.0f;
     private Vector3 playerVelocity;
     private bool groundedPlayer;
+    private int score = 0;
+    public int health = 5;
     void Start()
     {
         controller = gameObject.AddComponent<CharacterController>();
@@ -34,5 +36,23 @@ public class PlayerController : MonoBehaviour
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
 
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Pickup")
+        {
+            score += 1;
+            Destroy(other.gameObject);
+            Debug.Log($"Score: {score}");
+        }
+        if (other.tag == "Trap")
+        {
+            health -= 1;
+            Debug.Log($"Health: {health}");
+        }
+        if (other.tag == "Goal")
+        {
+            Debug.Log("You win!");
+        }
     }
 }
