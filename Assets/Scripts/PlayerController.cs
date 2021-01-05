@@ -12,12 +12,15 @@ public class PlayerController : MonoBehaviour
     private bool groundedPlayer;
     private int score = 0;
     public int health = 5;
-    public Text healthUI;
-    public Text scoreUI;
+    private Scene maze;
+    private Rigidbody rb;
 
     void Start()
     {
         controller = gameObject.AddComponent<CharacterController>();
+        maze = SceneManager.GetActiveScene();
+        rb = GetComponent<Rigidbody>();
+
     }
 
     // Update is called once per frame
@@ -26,10 +29,10 @@ public class PlayerController : MonoBehaviour
         if (health == 0)
         {
             Debug.Log("Game Over!");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            health = 5;
+            score = 0;
+            SceneManager.LoadScene(maze.name);
         }
-        healthUI.text = $"HEALTH: {health}";
-        scoreUI.text = $"SCORE: {score}";
     }
     void FixedUpdate()
     {
@@ -55,13 +58,13 @@ public class PlayerController : MonoBehaviour
     {
         if (other.tag == "Pickup")
         {
-            score += 1;
+            score++;
             Destroy(other.gameObject);
             Debug.Log($"Score: {score}");
         }
         if (other.tag == "Trap")
         {
-            health -= 1;
+            health--;
             Debug.Log($"Health: {health}");
         }
         if (other.tag == "Goal")
