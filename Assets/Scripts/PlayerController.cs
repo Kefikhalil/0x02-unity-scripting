@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class PlayerController : MonoBehaviour
     private bool groundedPlayer;
     private int score = 0;
     public int health = 5;
+    public Text healthUI;
+    public Text scoreUI;
+
     void Start()
     {
         controller = gameObject.AddComponent<CharacterController>();
@@ -18,6 +22,16 @@ public class PlayerController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        if (health == 0)
+        {
+            Debug.Log("Game Over!");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        healthUI.text = $"HEALTH: {health}";
+        scoreUI.text = $"SCORE: {score}";
+    }
+    void FixedUpdate()
     {
         groundedPlayer = controller.isGrounded;
         if (groundedPlayer && playerVelocity.y < 0)
